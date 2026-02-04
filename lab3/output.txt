@@ -1,0 +1,315 @@
+
+=======================
+     Welcome to Risk!    
+=======================
+
+
+LILNOODL's Army Composition:
+Footman: 4
+Archer: 4
+Knight: 6
+Siege Machine: 0
+
+Computer's Army Composition:
+Footman: 1
+Archer: 5
+Knight: 3
+Siege Machine: 1
+
+Initial Armies:
+LILNOODL's Army
+Footmen: 4, Archers: 4, Knights: 6, Siege Machines: 0
+Computer's Army
+Footmen: 1, Archers: 5, Knights: 3, Siege Machines: 1
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Siege Machine rolls 3.
+Siege Machine rolls 2.
+Siege Machine (Health: 3) scores 1 hit(s)!
+Computer dealt 1 total hits!
+LILNOODL receives 1 total damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+Archer rolls 3.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 6.
+Archer (Health: 1) scores 1 hit(s)!
+Archer rolls 2.
+Archer (Health: 1) scores 0 hit(s)!
+LILNOODL dealt 1 total hits!
+Computer receives 1 total damage!
+Knight takes 1 damage!
+
+Computer's turn to attack!
+Archer rolls 2.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 1.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 3.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 3.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 6.
+Archer (Health: 1) scores 1 hit(s)!
+Computer dealt 1 total hits!
+LILNOODL receives 1 total damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+Knight rolls 1.
+Knight (Health: 2) scores 0 hit(s)!
+Knight rolls 6.
+Knight (Health: 2) scores 1 hit(s)!
+Knight rolls 3.
+Knight (Health: 2) scores 1 hit(s)!
+Knight rolls 5.
+Knight (Health: 2) scores 1 hit(s)!
+Knight rolls 3.
+Knight (Health: 2) scores 1 hit(s)!
+Knight rolls 3.
+Knight (Health: 2) scores 1 hit(s)!
+LILNOODL dealt 5 total hits!
+Computer receives 5 total damage!
+Siege Machine takes 1 damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+Knight takes 1 damage!
+Footman takes 1 damage!
+
+Footman (Health: 0) has been eliminated
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+
+Computer's turn to attack!
+Knight rolls 4.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 3.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 6.
+Knight (Health: 2) scores 1 hit(s)!
+Computer dealt 3 total hits!
+LILNOODL receives 3 total damage!
+Footman takes 1 damage!
+
+Footman (Health: 0) has been eliminated
+Footman takes 1 damage!
+
+Footman (Health: 0) has been eliminated
+Footman takes 1 damage!
+
+Footman (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+Footman rolls 2.
+Footman (Health: 1) scores 0 hit(s)!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Computer dealt 0 total hits!
+LILNOODL receives 0 total damage!
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Siege Machine rolls 6.
+Siege Machine rolls 4.
+Siege Machine (Health: 2) scores 2 hit(s)!
+Computer dealt 2 total hits!
+LILNOODL receives 2 total damage!
+Knight takes 1 damage!
+Knight takes 1 damage!
+
+LILNOODL's turn to attack!
+Archer rolls 1.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 2.
+Archer (Health: 1) scores 0 hit(s)!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Archer rolls 4.
+Archer (Health: 1) scores 1 hit(s)!
+Archer rolls 3.
+Archer (Health: 1) scores 0 hit(s)!
+Archer rolls 6.
+Archer (Health: 1) scores 1 hit(s)!
+Computer dealt 2 total hits!
+LILNOODL receives 2 total damage!
+Knight takes 1 damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+Knight rolls 1.
+Knight (Health: 2) scores 0 hit(s)!
+Knight rolls 2.
+Knight (Health: 2) scores 0 hit(s)!
+Knight rolls 3.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 3.
+Knight (Health: 2) scores 1 hit(s)!
+Knight rolls 2.
+Knight (Health: 1) scores 0 hit(s)!
+Knight rolls 5.
+Knight (Health: 1) scores 1 hit(s)!
+LILNOODL dealt 3 total hits!
+Computer receives 3 total damage!
+Knight takes 1 damage!
+
+Knight (Health: 0) has been eliminated
+Knight takes 1 damage!
+
+Knight (Health: 0) has been eliminated
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+
+Computer's turn to attack!
+Knight rolls 5.
+Knight (Health: 2) scores 1 hit(s)!
+Computer dealt 1 total hits!
+LILNOODL receives 1 total damage!
+Footman takes 1 damage!
+
+Footman (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Computer dealt 0 total hits!
+LILNOODL receives 0 total damage!
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Siege Machine rolls 5.
+Siege Machine rolls 2.
+Siege Machine (Health: 2) scores 1 hit(s)!
+Computer dealt 1 total hits!
+LILNOODL receives 1 total damage!
+Knight takes 1 damage!
+
+LILNOODL's turn to attack!
+Archer rolls 1.
+Archer (Health: 1) scores 0 hit(s)!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Archer rolls 5.
+Archer (Health: 1) scores 1 hit(s)!
+Archer rolls 5.
+Archer (Health: 1) scores 1 hit(s)!
+Computer dealt 2 total hits!
+LILNOODL receives 2 total damage!
+Knight takes 1 damage!
+Knight takes 1 damage!
+
+Knight (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+Knight rolls 2.
+Knight (Health: 2) scores 0 hit(s)!
+Knight rolls 6.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 6.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 4.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 4.
+Knight (Health: 1) scores 1 hit(s)!
+LILNOODL dealt 4 total hits!
+Computer receives 4 total damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+Siege Machine takes 1 damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+Knight takes 1 damage!
+
+Computer's turn to attack!
+Knight rolls 6.
+Knight (Health: 1) scores 1 hit(s)!
+Computer dealt 1 total hits!
+LILNOODL receives 1 total damage!
+Knight takes 1 damage!
+
+Knight (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Computer dealt 0 total hits!
+LILNOODL receives 0 total damage!
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Siege Machine rolls 3.
+Siege Machine rolls 2.
+Siege Machine (Health: 1) scores 1 hit(s)!
+Computer dealt 1 total hits!
+LILNOODL receives 1 total damage!
+Archer takes 1 damage!
+
+Archer (Health: 0) has been eliminated
+
+LILNOODL's turn to attack!
+LILNOODL dealt 0 total hits!
+Computer receives 0 total damage!
+
+Computer's turn to attack!
+Computer dealt 0 total hits!
+LILNOODL receives 0 total damage!
+
+LILNOODL's turn to attack!
+Knight rolls 5.
+Knight (Health: 2) scores 1 hit(s)!
+Knight rolls 3.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 6.
+Knight (Health: 1) scores 1 hit(s)!
+Knight rolls 1.
+Knight (Health: 1) scores 0 hit(s)!
+LILNOODL dealt 3 total hits!
+Computer receives 3 total damage!
+Siege Machine takes 1 damage!
+
+Siege Machine (Health: 0) has been eliminated
+Knight takes 1 damage!
+
+Knight (Health: 0) has been eliminated
+
+Computer is defeated! You win!
+
+Final Armies:
+LILNOODL's Army
+Footmen: 0, Archers: 0, Knights: 4, Siege Machines: 0
+Computer's Army
+Footmen: 0, Archers: 0, Knights: 0, Siege Machines: 0

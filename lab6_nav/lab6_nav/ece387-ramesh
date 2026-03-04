@@ -161,7 +161,6 @@ class MoveToGoal(Node):
                     .15*distance
                 )
             else:
-                cmd.linear.x=0.0
                 self.state="ROTATE_TO_FINAL"
 
         elif self.state == "ROTATE_TO_FINAL":

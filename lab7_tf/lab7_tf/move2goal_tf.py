@@ -7,6 +7,9 @@ from rclpy.node import Node
 from sensor_msgs.msg import Imu
 from std_msgs.msg import Bool
 from tf_transformations import euler_from_quaternion
+from std_srvs.srv import Empty
+from nav2_msgs.srv import SetInitialPose
+import math
 
 
 class MoveToGoal(Node):
@@ -30,6 +33,12 @@ class MoveToGoal(Node):
         # Initialize the ROS2 node with name 'move_to_goal'
         super().__init__("move_to_goal")  
         
+         # TODO: Create a service server that will handle '/set_pose' service requests
+        # - Service type: 'SetInitialPose'
+        # - Service name: '/set_pose'
+        # - Callback function: 'self.set_pose_callback' to execute when the service is called
+        self.reset_service = self.create_service(SetInitialPose,'/set_pose',self.set_pose_callback) # Update this line.
+        
         # TODO: Publisher for sending velocity commands to the robot
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
 
@@ -39,12 +48,17 @@ class MoveToGoal(Node):
         # TODO: Subscriber to receive control status
         self.ctrl_subs = self.create_subscription(Bool, 'ctrl_relinq', self.ctrl_relinq_callback, 10)
 
-        # Variables to store the robot's current position and orientation
-        self.x = float(0)  # Current x-coordinate
-        self.y = float(0)  # Current y-coordinate
-        self.yaw = float(0)  # Current orientation (yaw angle in radians)
+        # Local Position Variables (Start at 0.0, 0.0, 0.0)
+        self.local_x = 0.0
+        self.local_y = 0.0
+        self.local_yaw = 0.0
 
-        self.has_control = False  # Flag indicating whether this node has control
+        # Variables for previous position to compute displacement
+        self.initial_global_x = None
+        self.initial_global_y = None
+        self.initial_global_yaw = None
+
+        self.has_control = False #ndicating whether this node has control
 
         # Goal position and final orientation
         self.goal_x = -0.61  # Target x position
@@ -56,34 +70,81 @@ class MoveToGoal(Node):
         # TODO: Timer to run the control loop at a fixed rate (every 0.1 seconds)
         self.timer = self.create_timer(0.1, self.control_loop)
 
-        print("init")
+        
+
+    def set_pose_callback(self, request: SetInitialPose.Request, response: Empty.Response) -> Empty.Response:
+        """
+        Resets the local position coordinates to zero and clears the previous position coordinates.
+        """
+
+        # Reset the local position coordinates
+        self.local_x = request.pose.pose.pose.position.x
+        self.local_y = request.pose.pose.pose.position.y
+
+        # Convert Quaternion to Euler Angles (Extract Yaw)
+        q = request.pose.pose.pose.orientation
+        quaternion = [q.x, q.y, q.z, q.w]
+        _, _, self.local_yaw = euler_from_quaternion(quaternion)
+
+        # Reset the state
+        self.state = "ROTATE_TO_GOAL"
+
+        # Clear the previous position coordinates
+        # This ensures that any previous position data is discarded
+        self.initial_global_x = None
+        self.initial_global_y = None
+        self.initial_global_yaw = None
+
+        # Log a message to indicate the local position has been reset
+        self.get_logger().info(f"Local pose set to x={self.local_x}, y={self.local_y}, yaw={self.local_yaw}.")
+
+        # Return the response to the service caller
+        return response
 
     def odom_callback(self, msg: Odometry) -> None:
         """
         Callback function for handling odometry messages.
-        Updates the robot's current x and y position.
+        Updates the local x and y coordinates relative to the starting position.
         """
-        # TODO: Extract x-coordinate from odometry
+        # Extract global x and y coordinates from the odometry message
+        global_x = msg.pose.pose.position.x
+        global_y = msg.pose.pose.position.y
 
-        self.x  = msg.pose.pose.position.x
+        # Check if this is the first iteration (initial global position not set)
+        if self.initial_global_x is None:
+            # Store the initial global position as the reference point
+            self.initial_global_x = global_x
+            self.initial_global_y = global_y
+            # Skip processing for the first iteration
+            return
 
-        # TODO: Extract y-coordinate from odometry
-        self.y = msg.pose.pose.position.y
+        # TODO: Compute the displacement of the global position from the initial global position
+        dx = global_x-self.initial_global_x
+        dy = global_y-self.initial_global_y
 
-        #print("odom")
+        # TODO: Rotate displacement to align with the initial local frame
+        # This step is necessary to ensure the local coordinates are relative to the starting orientation
+        theta=self.initial_global_yaw
+        self.local_x = math.cos(theta)*dx + math.sin(theta)*dy
+        self.local_y = -math.sin(theta)*dx + math.cos(theta)*dy
+        
+
 
     def imu_callback(self, imu_msg: Imu) -> None:
         """
-        Callback function for handling IMU messages.
-        Extracts yaw (rotation around Z-axis) from the quaternion orientation.
+        Callback function for handling control relinquishment messages.
+        Updates local yaw relative to the starting orientation.
         """
-        # TODO: Extract quaternion values and convert quaternion to 
-        # Euler angles - use euler_from_quaternion
         q = imu_msg.orientation
-        angles = euler_from_quaternion([q.x,q.y,q.z,q.w])
-        # Update yaw value
-        self.yaw = angles[2]
-        #print("imu callback")
+        _, _, global_yaw = euler_from_quaternion([q.x, q.y, q.z, q.w])
+
+        if self.initial_global_yaw is None:
+            # Store the initial yaw as a reference
+            self.initial_global_yaw = global_yaw
+            return  # Skip first iteration
+
+        # TODO: Compute local yaw relative to the initial global yaw
+        self.local_yaw = global_yaw-self.initial_global_yaw
 
     def ctrl_relinq_callback(self, relinq_msg: Bool) -> None:
         """
@@ -91,13 +152,16 @@ class MoveToGoal(Node):
         Updates the control status based on received messages.
         """
         # TODO: Update control flag
-        self.has_control=relinq_msg
-
+        if relinq_msg.data==True:
+            self.has_control = True
+        else:
+            self.has_control = False
+        
+        
         if self.has_control:
             self.get_logger().info("move2goal has taken control")
         else:
             self.get_logger().info("move2goal has lost control")
-        print("ctrl relinq callback")
 
 
     def control_loop(self) -> None:
@@ -112,11 +176,11 @@ class MoveToGoal(Node):
         
         # TODO: Compute the angle to the goal
         # Compute target heading angle
-        goal_theta = math.atan2(self.goal_y,self.goal_x)
+        goal_theta = math.atan2(self.goal_y, self.goal_x)
         
         
         # Compute difference between current and target angle
-        angle_error = goal_theta-self.yaw
+        angle_error = goal_theta-self.local_yaw
         # print(self.yaw)
         
         # Normalize angle error to range [-pi, pi]
@@ -124,25 +188,25 @@ class MoveToGoal(Node):
 
         # TODO: Compute the distance to the goal
         # Difference in x direction
-        error_x = self.goal_x-self.x
+        error_x = self.goal_x+self.local_x
         # Difference in y direction
-        error_y = self.goal_y-self.y
+        error_y = self.goal_y+self.local_y
         # Euclidean distance to goal
-        distance = math.sqrt((error_x*error_x) + (error_y*error_y))
+        distance = math.sqrt((error_x)**2 + (error_y)**2)
         if self.state == "ROTATE_TO_GOAL":
             """
             First state: Rotate the robot towards the goal.
             """
             if abs(angle_error) > 0.05:  # Allow small tolerance
                 cmd.angular.z = (
-                    0.4 * angle_error
+                    0.3* angle_error
                 )  # Adjust rotation speed based on error
             else:
                 cmd.angular.z = 0.0  # Stop rotating when aligned
                 self.state = "MOVE_FORWARD"  # Transition to next state
 
             self.get_logger().info(
-                f"yaw={math.degrees(self.yaw):.2f}, angle_error={math.degrees(angle_error):.2f}, distance={distance:.3f}"
+                f"yaw={math.degrees(self.local_yaw):.2f}, angle_error={math.degrees(angle_error):.2f}, distance={distance:.3f}"
             )
 
         elif self.state == "MOVE_FORWARD":
@@ -150,17 +214,14 @@ class MoveToGoal(Node):
             Second state: Move towards the goal in a straight line.
             """
             self.get_logger().info(
-                f"x={self.x:.3f}, y={self.y:.3f}, angle_error={math.degrees(angle_error):.2f}, distance={distance:.3f}"
+                f"x={error_x:.3f}, y={error_y:.3f}, angle_error={math.degrees(angle_error):.2f}, distance={distance:.3f}"
             )
 
             # TODO:
             # Continue moving if not at goal - Move forward at constant speed of 0.15
             # If the distance is less than 0.15, stop moving and transition to final rotation
-            if abs(distance)>.15:
-                cmd.linear.x = (
-                    .15*distance
-                )
-            else:
+            cmd.linear.x = 0.15
+            if distance < 0.15:
                 cmd.linear.x=0.0
                 self.state="ROTATE_TO_FINAL"
 
@@ -169,12 +230,11 @@ class MoveToGoal(Node):
             Third state: Rotate to match the final desired orientation.
             """
             # TODO: Compute final angle error and normalize it.
-            final_angle_error = self.goal_yaw-self.yaw
+            final_angle_error = self.goal_yaw-self.local_yaw
             final_angle_error = (final_angle_error + math.pi) % (2 * math.pi) - math.pi
 
-            print(final_angle_error)
             self.get_logger().info(
-                f"yaw={math.degrees(self.yaw):.2f}, final_angle_error={math.degrees(final_angle_error):.2f}"
+                f"yaw={math.degrees(self.local_yaw):.2f}, final_angle_error={math.degrees(final_angle_error):.2f}"
             )
 
             # TODO: If the error is greater than 0.05 radians, rotate the robot with a speed proportional to the error (0.5 * final_angle_error).

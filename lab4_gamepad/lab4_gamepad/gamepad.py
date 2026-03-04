@@ -9,7 +9,10 @@ from rclpy.node import Node  # Base class for creating ROS 2 nodes
 from sensor_msgs.msg import Joy # Message type for joystick (gamepad) inputs 
 from geometry_msgs.msg import Twist # Message type for velocity commands
 from std_msgs.msg import Bool 
-
+from std_srvs.srv import Empty
+from geometry_msgs.msg import PoseWithCovarianceStamped
+from nav2_msgs.srv import SetInitialPose
+import math
 
 class Gamepad(Node):
     """
@@ -21,7 +24,7 @@ class Gamepad(Node):
         Constructor: Initializes the gamepad node.
         """
         # TODO: Write your code here
-        super().__init__('joy_node')
+        super().__init__('gamepad')
         self.subscription = self.create_subscription(Joy, 'joy', self.joy_callback, 10)
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
 
@@ -37,6 +40,58 @@ class Gamepad(Node):
         # Log a message indicating that the node has started successfully
         # self.get_logger().info("Joy to cmd_vel node started!")
 
+        # TODO: Create a service client to call the '/set_pose' service
+        # - Service type: 'SetInitialPose'
+        # - Service name: '/set_pose'
+        self.reset_pose_client = self.create_client(SetInitialPose,'/set_pose')  # Update this line
+    def send_set_pose_request(self, x:float, y:float, theta:float):
+        """
+        Calls the 'reset_pose' service to reset the robot's pose.
+        """
+        # Check if the service is available
+        if not self.reset_pose_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().warn("Service 'reset_pose' not available.")
+            return
+
+        # Create a request object 
+        request = SetInitialPose.Request()
+        request.pose = PoseWithCovarianceStamped()  
+
+        # Set Header
+        request.pose.header.frame_id = "map"
+        request.pose.header.stamp = self.get_clock().now().to_msg()
+
+        # TODO: Set Position
+        request.pose.pose.pose.position.x=x
+        request.pose.pose.pose.position.y=y
+        # TODO: Convert Yaw (theta) to Quaternion
+        # z = sin(theta/2), w = cos(theta/2)
+        request.pose.pose.pose.orientation.z=math.sin(theta/2)
+        request.pose.pose.pose.orientation.w=math.cos(theta/2)
+
+        # TODO: Set Covariance (required by AMCL, small uncertainty such as [0.1]*36)
+        request.pose.pose.covariance=[0.1]*36
+        
+
+        # Call the service asynchronously
+        future = self.reset_pose_client.call_async(request)
+
+    # Add a callback to handle the service response
+        future.add_done_callback(self.reset_pose_done_callback)
+
+    def reset_pose_done_callback(self, future):
+        """
+        Callback function to handle the response from the 'reset_pose' service.
+        """
+        try:
+            # Check if the service call was successful
+            response = future.result()
+            if response:
+                self.get_logger().info("Pose reset successfully.")
+            else:
+                self.get_logger().error("Pose reset failed.")
+        except Exception as e:
+            self.get_logger().error(f"Service call failed: {e}")
     def joy_callback(self, msg: Joy):
         """
         Callback function that processes incoming joystick messages.
@@ -55,6 +110,10 @@ class Gamepad(Node):
 
             # Log status update
             self.get_logger().info("RC has relinquished control.")
+        
+        # Check if button 2 (Y) is pressed to reset the pose
+        if msg.buttons[3]:
+            self.send_set_pose_request(0.0,0.0,0.0) # Call the reset_pose service
             
 
         # TODO: Check if RC does not have control and button B (Red) is pressed
@@ -77,6 +136,10 @@ class Gamepad(Node):
         Twist_msg.linear.x = 0.20 * msg.axes[1]
         Twist_msg.angular.z = 2.0 * msg.axes[3]
         self.publisher_.publish(Twist_msg)
+
+    
+
+
 
 def main(args=None):
     """

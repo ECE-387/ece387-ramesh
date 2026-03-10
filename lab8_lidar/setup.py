@@ -1,8 +1,6 @@
 from setuptools import find_packages, setup
-import os
-from glob import glob
 
-package_name = 'lab7_tf'
+package_name = 'lab8_lidar'
 
 setup(
     name=package_name,
@@ -12,14 +10,13 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='t5',
     maintainer_email='c27Ramya.Ramesh@afacademy.af.edu',
     description='TODO: Package description',
-    license='BSD-3-Claude',
+    license='BSD-3-Clause',
     extras_require={
         'test': [
             'pytest',
@@ -27,7 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-        	'move2goal_tf = lab7_tf.move2goal_tf:main',
+        'line_follower = lab8_lidar.line_follower:main',
+        'wall_detector = lab8_lidar.wall_detector:main',
         ],
     },
 )

@@ -44,6 +44,7 @@ class Gamepad(Node):
         # - Service type: 'SetInitialPose'
         # - Service name: '/set_pose'
         self.reset_pose_client = self.create_client(SetInitialPose,'/set_pose')  # Update this line
+        
     def send_set_pose_request(self, x:float, y:float, theta:float):
         """
         Calls the 'reset_pose' service to reset the robot's pose.

@@ -7,7 +7,9 @@ setup(
     version='0.0.0',
     packages=find_packages(exclude=['test']),
     data_files=[
-    	('share/' + package_name + '/config', ['config/default_cam.yaml'], ['config/stop_detector.svm']),
+    	('share/' + package_name + '/config', ['config/default_cam.yaml']), 
+    	('share/' + package_name + '/config', ['launch/vision.launch.py']), 
+    	('share/' + package_name + '/config', ['config/stop_detector.svm']),
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),

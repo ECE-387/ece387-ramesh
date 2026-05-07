@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+        'final = final_project.final:main',
         ],
     },
 )

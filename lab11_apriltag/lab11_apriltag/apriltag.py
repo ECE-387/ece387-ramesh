@@ -156,6 +156,7 @@ class AprilTagNode(Node):
         # Detect AprilTags in the rectified image
         tags = self.detector.detect(rectified_gray, estimate_tag_pose=True,
                                     camera_params=camera_params, tag_size=self.tag_size)
+        intel = []
 
         for tag in tags:
             # Extract position (translation vector) and orientation (rotation matrix) of the detected tag
@@ -194,10 +195,14 @@ class AprilTagNode(Node):
              # TODO: Label the tag ID at the center of the tag.
             cv2.putText(rectified_gray, f'{tag_id}', center, cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
 
+            self.get_logger().info(str(corners))
+
+            intel.append([tag_id, t, quat])
+
         # Display the rectified image with drawn tags
         cv2.imshow("AprilTag Detection", rectified_gray)
         cv2.waitKey(1)
-
+        #return intel
 
 def main(args=None):
     """

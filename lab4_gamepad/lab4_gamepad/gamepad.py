@@ -4,7 +4,7 @@
 # Import necessary ROS 2 libraries 
 import rclpy  # ROS 2 client library for Python
 from rclpy.node import Node  # Base class for creating ROS 2 nodes
-
+import time
 # Import message types
 from sensor_msgs.msg import Joy # Message type for joystick (gamepad) inputs 
 from geometry_msgs.msg import Twist # Message type for velocity commands
@@ -45,6 +45,11 @@ class Gamepad(Node):
         # - Service name: '/set_pose'
         self.reset_pose_client = self.create_client(SetInitialPose,'/set_pose')  # Update this line
         
+        self.next_event = self.create_publisher(Bool, 'next_event', 1)
+        self.next_event2 = self.create_publisher(Bool, 'next_event2', 1)
+        self.event_num = True
+        self.get_logger().info("Startup Complete") 
+
     def send_set_pose_request(self, x:float, y:float, theta:float):
         """
         Calls the 'reset_pose' service to reset the robot's pose.
@@ -93,6 +98,7 @@ class Gamepad(Node):
                 self.get_logger().error("Pose reset failed.")
         except Exception as e:
             self.get_logger().error(f"Service call failed: {e}")
+
     def joy_callback(self, msg: Joy):
         """
         Callback function that processes incoming joystick messages.
@@ -115,7 +121,21 @@ class Gamepad(Node):
         # Check if button 2 (Y) is pressed to reset the pose
         if msg.buttons[3]:
             self.send_set_pose_request(0.0,0.0,0.0) # Call the reset_pose service
-            
+        
+        # if right bumper pressed then go to the next command
+        if msg.buttons[5]:
+            send = Bool()
+            self.event_num = True
+            self.next_event.publish(send)
+            self.get_logger().info("Right Bumper pressed")
+            time.sleep(1)
+        
+        #if msg.buttons[4]:
+        #    send = Bool()
+        #    self.event_num = True
+        #    self.next_event2.publish(send)
+        #    self.get_logger().info("Left Bumper pressed")
+        #    time.sleep(1)
 
         # TODO: Check if RC does not have control and button B (Red) is pressed
         if self.has_control==False and msg.buttons[1]==1:
@@ -135,10 +155,9 @@ class Gamepad(Node):
         
         Twist_msg = Twist()
         Twist_msg.linear.x = 0.20 * msg.axes[1]
-        Twist_msg.angular.z = 2.0 * msg.axes[3]
+        Twist_msg.angular.z = msg.axes[3]
         self.publisher_.publish(Twist_msg)
 
-    
 
 
 

@@ -14,18 +14,13 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             # TODO: Complete this function call
-            package = 'lab10_cv',
-            executable = 'stop_detector',
-            name ='stop_detector_node',
-            output = 'screen',
+
             arguments=['-d', stop_detector_model],
         ),
         Node(
             # TODO: Complete this function call
-            package = 'usb_cam',
-            executable = 'usb_cam_node_exe',
-            name = 'camera_node',
-            output = 'screen',
+
+
             parameters=[{
                 'video_device': '/dev/video0',
                 'framerate': 15.0,
@@ -34,10 +29,8 @@ def generate_launch_description():
         ),
         Node(
             # TODO: Complete this function call
-            package = 'lab11_apriltag',
-            executable = 'apriltag',
-            name = 'apriltag_node',
-            output = 'screen',
+
+
             parameters=[{
                 'camera_info_file': camera_info_path
             }]
